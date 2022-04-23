@@ -1,0 +1,18 @@
+# ninja log v5
+11	3433	6723325866379327	CMakeFiles/vulkanLearn.dir/main.cpp.obj	d808c15c08c1fe3
+28	1119	6724082056020261	CMakeFiles/vulkanLearn.dir/src/helloTraingle.cpp.obj	ab3d90bc617b254
+1513	2133	6724200728600801	vulkanLearn.exe	2fc9c5e154b38752
+9	1513	6724200722358173	CMakeFiles/vulkanLearn.dir/src/main.cpp.obj	fce550a2bff61ac7
+3	268	6724213451531743	build.ninja	64af0c7389cbfb78
+48	1314	6724200720457449	CMakeFiles/vulkanLearn.dir/src/helloTriangle.cpp.obj	7e07a71f81761ff8
+18	1192	6724246087300999	CMakeFiles/vulkanLearn.dir/src/instance.cpp.obj	a413df7674afc47b
+7	1304	6724246088484213	CMakeFiles/vulkanLearn.dir/src/main.cpp.obj	fce550a2bff61ac7
+1304	1489	6724246090210641	vulkanLearn.exe	f5f64283a4054c36
+5	1878	6724302166128914	CMakeFiles/vulkanLearn.dir/src/main.cpp.obj	fce550a2bff61ac7
+65	1884	6724302166175891	CMakeFiles/vulkanLearn.dir/src/instance.cpp.obj	a413df7674afc47b
+1884	2680	6724302174124091	vulkanLearn.exe	f5f64283a4054c36
+5	1303	6724302322019972	CMakeFiles/vulkanLearn.dir/src/main.cpp.obj	fce550a2bff61ac7
+1305	1662	6724302325693143	vulkanLearn.exe	f5f64283a4054c36
+41	1344	6724385978936188	CMakeFiles/vulkanLearn.dir/src/instance.cpp.obj	a413df7674afc47b
+6	1358	6724385979092424	CMakeFiles/vulkanLearn.dir/src/main.cpp.obj	fce550a2bff61ac7
+1358	1814	6724385983632605	vulkanLearn.exe	f5f64283a4054c36
