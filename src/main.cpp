@@ -16,7 +16,8 @@
 
 int main()
 {
-//	To check extension support currently available.
+/*	To check extension support currently available. */
+
 //	uint32_t extensionCount = 0;
 //	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 //	std::vector<VkExtensionProperties> extensions(extensionCount);
