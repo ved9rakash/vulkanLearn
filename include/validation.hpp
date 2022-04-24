@@ -15,9 +15,7 @@
 #endif //NDEBUG
 
 namespace validation {
-	const std::vector<const char*> validationLayers = {
-			"VK_LAYER_KHRONOS_validation"
-	};
+	extern const std::vector<const char*> validationLayers;
 }
 
 
