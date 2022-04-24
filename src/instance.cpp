@@ -75,12 +75,17 @@ void HelloTriangleApplication::createInstance()
 	 * Creating/Initializing an Instance to connect vulkan library
 	 * to our application. Additional, Specifying details about drivers.
 	 */
+
 	if (enableValidationLayers && !checkValidationSupport()) {
+		// enableValidationLayers = true for Debug Builds.
+		// checkValidationSupport() to check if layers are present.
 		throw std::runtime_error("Validation Layers requested, but not available.");
 	}
 
-	//  Optional. Graphics driver related structure initialization
-	//  optimize application.
+	/*
+	 * Optional.
+	 * Graphics driver related structure initialization for optimizing application.
+	*/
 	VkApplicationInfo appInfo{};
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	appInfo.pApplicationName = "Hello Triangle";
@@ -90,9 +95,10 @@ void HelloTriangleApplication::createInstance()
 	appInfo.apiVersion = VK_API_VERSION_1_0;
 
     /*
-     * Not Optional. Tell the vulkan driver which global variables
-     * and validation layers we want to use. Global means, which apply to
-     * whole program and not to specific device.
+     * Not Optional.
+     * Tell the vulkan driver which global variables and validation
+     * layers we want to use. Global means, which apply to whole
+     * program and not to specific device.
     */
 
 	//Create Vulkan instance information.
@@ -127,43 +133,6 @@ void HelloTriangleApplication::createInstance()
 }
 
 
-std::vector<const char*> HelloTriangleApplication::getRequiredExtensions()
-{
-	uint32_t glfwExtensionCount = 0;
-	const char** glfwExtension;
-
-	// Get required instance extension from GLFW.
-	// Return Extension names and Extension Count.
-	glfwExtension = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-	std::vector<const char*> extensions(glfwExtension, glfwExtension + glfwExtensionCount);
-
-	if (enableValidationLayers) {
-		/*
-		 * Note: We are using MACRO's. Here, VK_EXT_DEBUG_UTILS_EXTENSION_NAME is same
-		 * as VK_EXT_DEBUG_utils string. Macro avoids Typo.
-		 */
-		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-	}
-	return extensions;
-}
-
-VkBool32 HelloTriangleApplication::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-		VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-		void* pUserData)
-{
-	std::cerr << "validation Layer: " << pCallbackData->pMessage << std::endl;
-	return VK_FALSE;
-}
-
-void HelloTriangleApplication::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
-{
-	createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-	createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-	createInfo.pfnUserCallback = static_cast<PFN_vkDebugUtilsMessengerCallbackEXT>(debugCallback);
-	createInfo.pUserData = nullptr; // Optional
-}
 
 void HelloTriangleApplication::setupDebugMessenger()
 {
