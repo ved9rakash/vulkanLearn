@@ -1,30 +1,21 @@
 //
 // Created by Vaibhav on 23-04-2022.
 //
-#include <cstring>
-#include "instance.hpp"
-#include "validation.hpp"
+#include "helloTriangle.hpp"
 
 #include <iostream>
 
-VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
-	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-	if (func != nullptr) {
-		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
-	} else {
-		return VK_ERROR_EXTENSION_NOT_PRESENT;
-	}
-}
-
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
-	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-	if (func != nullptr) {
-		func(instance, debugMessenger, pAllocator);
-	}
-}
 
 void HelloTriangleApplication::run()
 {
+	/*
+	 * Main application function.
+	 * Calls GLFW to create window.
+	 * Calls Vulkan to set up vulkan environment.
+	 * Calls mainloop() for window to work and interact.
+	 * At last, Calls clea up function to clean memory.
+	 */
+
 	initWindow();
 	initVulkan();
 	mainLoop();
@@ -42,7 +33,7 @@ void HelloTriangleApplication::initWindow()
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-	//	 Resizable window takes more care.
+	//	Resizable window takes more care.
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	//	800, 600, "Vulkan", Optional to specify monitor, only for openGL
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
@@ -52,8 +43,12 @@ void HelloTriangleApplication::initWindow()
 void HelloTriangleApplication::initVulkan()
 {
 	//	Initialize Vulkan in GLFW Created window.
+
+	//Creating instance.
 	createInstance();
 	setupDebugMessenger();
+	pickPhysicalDevice();
+	createLogicDevice();
 }
 
 void HelloTriangleApplication::mainLoop()
@@ -113,11 +108,16 @@ void HelloTriangleApplication::createInstance()
 	createInfo.ppEnabledExtensionNames = extensions.data();
 
 
+	VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
 	if (enableValidationLayers) {
-		createInfo.enabledLayerCount = static_cast<uint32_t>(validation::validationLayers.size());
-		createInfo.ppEnabledLayerNames = validation::validationLayers.data();
+		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		createInfo.ppEnabledLayerNames = validationLayers.data();
+
+		populateDebugMessengerCreateInfo(debugCreateInfo);
+		createInfo.pNext = static_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugCreateInfo);
 	} else {
 		createInfo.enabledLayerCount = 0;
+		createInfo.pNext = nullptr;
 	}
 
 	/* Creating Vulkan instance.
@@ -132,27 +132,13 @@ void HelloTriangleApplication::createInstance()
 	}
 }
 
-
-
-void HelloTriangleApplication::setupDebugMessenger()
-{
-	if (!enableValidationLayers)
-		return ;
-
-	VkDebugUtilsMessengerCreateInfoEXT createInfo{};
-	populateDebugMessengerCreateInfo(createInfo);
-
-	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-		throw std::runtime_error("Failed to setup debug messenger");
-	}
-}
-
 void HelloTriangleApplication::cleanUp()
 {
 	/*
 	 * Explicit Destructor to destroy or deAllocate dynamic memory or
 	 * clean up resources. At last destroying and terminating GLFW itself.
 	 */
+	vkDestroyDevice(device, nullptr);
 
 	if (enableValidationLayers) {
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
