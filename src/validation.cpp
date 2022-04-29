@@ -2,12 +2,9 @@
 // Created by Vaibhav on 23-04-2022.
 //
 #include <cstring>
-#include "instance.hpp"
-#include "validation.hpp"
+#include <iostream>
+#include "helloTriangle.hpp"
 
-const std::vector<const char*> validation::validationLayers = {
-		"VK_LAYER_KHRONOS_validation"
-};
 
 bool HelloTriangleApplication::checkValidationSupport()
 {
@@ -23,7 +20,7 @@ bool HelloTriangleApplication::checkValidationSupport()
 	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
 	// Check for validation layers. If present, return True else False.
-	for (const char* layerName : validation::validationLayers) {
+	for (const char* layerName : validationLayers) {
 		bool layerFound = false;
 
 		for (const auto& layerProperties : availableLayers) {
@@ -69,11 +66,45 @@ void HelloTriangleApplication::populateDebugMessengerCreateInfo(VkDebugUtilsMess
 	createInfo.pUserData = nullptr; // Optional
 }
 
+
 VkBool32 HelloTriangleApplication::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 		VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData)
 {
+	//	It indicates that if Vulkan call that triggered validation layer message should be aborted.
+	// 	Returning VK_TRUE will abort the call with error, so we use VK_FALSE.
 	std::cerr << "validation Layer: " << pCallbackData->pMessage << std::endl;
 	return VK_FALSE;
 }
 
+
+// Setting Up debug messenger.
+
+VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+	if (func != nullptr) {
+		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+	} else {
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+}
+
+void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
+	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+	if (func != nullptr) {
+		func(instance, debugMessenger, pAllocator);
+	}
+}
+
+void HelloTriangleApplication::setupDebugMessenger()
+{
+	if (!enableValidationLayers)
+		return ;
+
+	VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+	populateDebugMessengerCreateInfo(createInfo);
+
+	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to setup debug messenger");
+	}
+}
