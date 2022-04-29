@@ -14,7 +14,8 @@ include_directories(./include/)                     #{CMAKE_CURRENT_DIR}/include
 add_executable(vulkanLearn
         src/main.cpp
         src/instance.cpp
-        src/validation.cpp)
+        src/validation.cpp
+        src/physicalDevice.cpp)
 
 target_link_libraries(vulkanLearn
         PRIVATE Vulkan::Vulkan
