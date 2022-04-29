@@ -3,11 +3,7 @@
 	#define GLFW_INCLUDE_VULKAN
 #endif //GLFW_INCLUDE_VULKAN
 
-#include "instance.hpp"
-#include "validation.hpp"
-
-#include "GLFW/glfw3.h"
-#include "vulkan/vulkan.h"
+#include "helloTriangle.hpp"
 
 #include <iostream>
 #include <cstdlib>
